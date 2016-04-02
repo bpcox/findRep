@@ -1,3 +1,4 @@
+import sys
 import sunlight
 import geopy
 from geopy.geocoders import GoogleV3
@@ -21,7 +22,6 @@ if not(federalLegislators or stateLegislators):
 print "State Legislators:"
 for stateRep in stateLegislators:
     print "Rep. {} is a {} member of the {} house".format(stateRep['last_name'],stateRep['party'],stateRep['chamber'])
-
 print "Federal Legislators:"
 for federalRep in federalLegislators:
     if federalRep['chamber']=='senate':

@@ -104,7 +104,7 @@ def get_representatives(intent):
 	if len(senators) is 2:
 			senators_string = "Your senators are " + senators[0]['first_name'] + ' ' + senators[0]['last_name'] + " and " + senators[1]['first_name'] + ' ' + senators[1]['last_name'] + '. '
 	elif len(senators) is 0:
-			senators_string = "You have no senators. "
+			senators_string = "You have no senators."
         else:
 			senators_string = "Your zip code crosses state boundaries."
 			
@@ -114,10 +114,10 @@ def get_representatives(intent):
 			reps_string = "This zip code has more than one representative. "
         
         speech_output = reps_string + senators_string
+
     else:
         speech_output = "Sorry, that isn't a valid zip code. " \
                         "Please try again."
-    
     
     reprompt_text = ""                      
     return build_response(session_attributes, build_speechlet_response(

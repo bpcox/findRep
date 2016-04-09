@@ -1,12 +1,12 @@
 {
       "intents": [
          {
-            "intent": "FindByZip"
+            "intent": "FindByZip",
             "slots": [
                {
                   "name": "zip",
-                  "type": "AMAZON>NUMBER"
-               },
+                  "type": "AMAZON.NUMBER"
+               }
                ]
           }
           ]

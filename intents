@@ -1,0 +1,13 @@
+{
+      "intents": [
+         {
+            "intent": "FindByZip"
+            "slots": [
+               {
+                  "name": "zip",
+                  "type": "AMAZON>NUMBER"
+               },
+               ]
+          }
+          ]
+}

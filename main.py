@@ -60,6 +60,11 @@ def on_intent(intent_request, session):
     # Dispatch to your skill's intent handlers
     if intent_name == "FindByZip":
         return get_representatives(intent)
+    #elif intent_name == "FindSenByZip":
+    #elif intent_name == "FindRepByZip":
+    #elif intent_name == "FindContactInfo":
+    #elif intent_name == "FindParty":
+    #elif intent_name == "FindTerm":
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     else:
@@ -125,7 +130,7 @@ def get_welcome_response():
     add those here
     """
 
-    session_attributes = "Blah"
+    session_attributes = {} 
     card_title = "Welcome"
     speech_output = "Ask for the representative for your zip code."
     

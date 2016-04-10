@@ -1,3 +1,3 @@
 #!/bin/bash
 echo Adding files to archive
-zip archive.zip main.py
+zip archive.zip main.py config.py

@@ -3,7 +3,25 @@ FindByZip Who are the reps for {zip}
 FindByZip Who represents {zip}
 FindByZip Reps for {zip}
 FindByZip Representatives for {zip}
-GetParty What party is {rep} in?
-GetParty What party does {rep} belong to?
-GetParty Is {rep} a Democrat or a Republican?
-GetParty Is {rep} a Republican or a Democrat?
+GetParty What party is {rep} in
+GetParty What party does {rep} belong to
+GetParty Is {rep} a Democrat or a Republican
+GetParty Is {rep} a Republican or a Democrat
+GetTwitter What is the twitter for {rep}
+GetTwitter What is the twitter account for {rep}
+GetTwitter How can I tweet {rep}
+GetTwitter Does {rep} have a twitter
+GetPhone What is {rep}'s phone number
+GetPhone How can I call {rep}
+GetPhone What is the number for {rep}s office
+GetPhone What is the phone number for {rep}s office
+GetOffice What is the address for {rep}
+GetOffice Where is {rep} located
+GetOffice How can I mail {rep}
+GetOffice Where do I send {rep} mail
+GetOffice Where is {rep}s office.
+TermEnd When does {rep}s term end.
+TermEnd When is {rep} out of office.
+TermEnd When is {rep} up for re election.
+GetState What state is {rep} from.
+GetState What state does {rep} represent.

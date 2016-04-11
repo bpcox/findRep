@@ -203,7 +203,7 @@ def get_office(intent):
     session_attributes = {}
     name = (intent['slots']['rep']['value']).lower()
     
-    congressman = findRep(name, 'congressNames.json',True)
+    congressman = findRep(name, 'congressNames.json',address=True)
 
     if congressman:
         speech_output = generateAttributeString(congressman,'full_address','address')
@@ -263,15 +263,11 @@ def generateAttributeString(rep,attribute,nickname):
 
 
 def expandTitle(rep):
-    if rep['title'] == 'Rep':
-        return 'Representative'
-    elif rep['title']== 'Sen':
-        return 'Senator'
-    elif rep['title'] == 'Com':
-        return 'Commissioner'
-    elif rep['title'] == 'Del':
-        return 'Delegate'
-    else:
+
+    titleDict =  {'Rep': 'Representative','Sen':'Senator','Com':'Commissioner','Del':'Delegate'}
+    try:
+        return titleDict[rep['title']]
+    except KeyError:
         return ''
         
 # --------------- Helpers that build all of the responses ----------------------

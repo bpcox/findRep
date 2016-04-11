@@ -7,9 +7,11 @@ address = json.loads(response.read())
 addressDict = dict()
 for i in range(0,len(address['objects'])-1):
     try:
-        addressDict[address['objects'][i]['person']['bioguideid']]=address['objects'][i]['extra']['address']
-    except Exception as e:
+        addressDict[address['objects'][i]['person']['bioguideid']]=address['objects'][i]['extra']['address'].replace("HOB","House Office Building")
+    except KeyError:
         addressDict[address['objects'][i]['person']['bioguideid']]="not currently known"
+    except:
+        print "Unexpected error"
 
 with open('addressDict.json','w') as f:
     json.dump(addressDict,f)

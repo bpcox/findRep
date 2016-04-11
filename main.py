@@ -135,15 +135,7 @@ def get_party(intent):
     name = (intent['slots']['rep']['value']).lower()
     print (name)
     congressman = findRep(name, congressNames)
-    memberID = None
-    """
-    for k,v in congressNames.iteritems():
-        if (intent['slots']['rep']['value']).lower() in v:
-            memberID = k
-            break
-
-
-    congressman = sunlight.congress.legislator(memberID,id_type='bioguide') """
+    
     if congressman:
         if congressman['party'] == 'R':
             party = ' Republican'
@@ -160,10 +152,6 @@ def get_party(intent):
         elif congressman['title'] == 'Del':
             fulltitle = 'Delegate'
         speech_output = fulltitle + ' ' + congressman['last_name'] + ' is a' + party
-	
-
-
-
 
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
@@ -197,10 +185,7 @@ def findRep(name,nameDict):
         if name in v:
             print("found")
             return sunlight.congress.legislator(k,id_type='bioguide')
-        else:
-            print ("not found")
-            return None
-
+    return None
     
         
 # --------------- Helpers that build all of the responses ----------------------

@@ -4,13 +4,37 @@
       "intent": "FindByZip",
       "slots": [
         {
-          "name": "Sign",
+          "name": "zip",
           "type": "AMAZON.NUMBER"
         }
       ]
     },
     {
       "intent": "GetParty",
+      "slots": [
+        {
+          "name": "rep",
+          "type": "federalRep"
+        }]
+    },
+     {
+      "intent": "GetTwitter",
+      "slots": [
+        {
+          "name": "rep",
+          "type": "federalRep"
+        }]
+    },
+         {
+      "intent": "GetPhone",
+      "slots": [
+        {
+          "name": "rep",
+          "type": "federalRep"
+        }]
+    },
+             {
+      "intent": "GetOffice",
       "slots": [
         {
           "name": "rep",

@@ -14,12 +14,11 @@ def lambda_handler(event, context):
     Check Application ID
     """
     if (event['session']['application']['applicationId'] !=
-             config.applicationid):
+         config.applicationid):
          raise ValueError("Invalid Application ID")
 
     if event['session']['new']:
-        on_session_started({'requestId': event['request']['requestId']},
-                           event['session'])
+        on_session_started({'requestId': event['request']['requestId']}, event['session'])
 
     if event['request']['type'] == "LaunchRequest":
         return on_launch(event['request'], event['session'])
@@ -91,31 +90,39 @@ def get_representatives(intent):
     session_attributes = {}
 
     congressmen = sunlight.congress.locate_legislators_by_zip(intent['slots']['zip']['value'])
-	
+        
     if congressmen:
 
         card_title = intent['slots']['zip']
         
         senators = list()
-	reps = list()
+        reps = list()
         for congressman in congressmen:
-			if congressman['chamber']=='senate':
-				senators.append(congressman)
-			else:
-				reps.append(congressman)
-				
-	if len(senators) is 2:
-			senators_string = "Your senators are " + senators[0]['first_name'] + ' ' + senators[0]['last_name'] + " and " + senators[1]['first_name'] + ' ' + senators[1]['last_name'] + '. '
-	elif len(senators) is 0:
-			senators_string = "You have no senators."
+            if congressman['chamber']=='senate':
+                senators.append(congressman)
+            else:
+                reps.append(congressman)
+                                
+        if len(senators) is 2:
+            senators_string = "Your senators are " + senators[0]['first_name'] + ' ' + senators[0]['last_name'] + " and " + senators[1]['first_name'] + ' ' + senators[1]['last_name'] + '. '
+        elif len(senators) is 0:
+            senators_string = "You have no senators."
         else:
-			senators_string = "Your zip code crosses state boundaries."
-			
-	if len(reps) is 1:
-			reps_string = "Your representative is " + reps[0]['first_name'] + ' ' + reps[0]['last_name'] + '. '
-	else:
-			reps_string = "This zip code has more than one representative. "
-        
+            senators_string = "Your senators could be " + reps[0]['first_name'] + ' ' + reps[0]['last_name']
+            for i in range(1,len(senators)):
+                if i%2 == 1:
+                    senators_string += ' and ' + senators[i]['first_name'] + '' + senators[i]['last_name'] + ' of ' + expandState(senators[i])
+                else:
+                    senators_string+= ' or ' + senators[i]['first_name'] + ' ' + senators[i]['last_name']
+            senators_string+='.'
+        if len(reps) is 1:
+            reps_string = "Your representative is " + reps[0]['first_name'] + ' ' + reps[0]['last_name'] + '. '
+
+        else:
+            reps_string = "Your representative could be " + reps[0]['first_name'] + ' ' + reps[0]['last_name']
+            for i in range(1,len(reps)):
+                reps_string += ' or ' + reps[i]['first_name'] + ' ' + reps[i]['last_name']
+        reps_string += '. '
         speech_output = reps_string + senators_string
 
     else:
@@ -284,7 +291,72 @@ def expandTitle(rep):
         return titleDict[rep['title']]
     except KeyError:
         return ''
-        
+    
+def expandState(rep):
+    stateDict = {'AL':'Alabama',
+    'AK':'Alaska',
+    'AS':'American Samoa',
+    'AZ':'Arizona',
+    'AR':'Arkansas',
+    'CA':'California',
+    'CO':'Colorado',
+    'CT':'Connecticut',
+    'DE':'Delaware',
+    'DC':'District of Columbia',
+    'FL':'Florida',
+    'GA':'Georgia',
+    'GU':'Guam',
+    'HI':'Hawaii',
+    'ID':'Idaho',
+    'IL':'Illinois',
+    'IN':'Indiana',
+    'IA':'Iowa',
+    'KS':'Kansas',
+    'KY':'Kentucky',
+    'LA':'Louisiana',
+    'ME':'Maine',
+    'MD':'Maryland',
+    'MH':'Marshall Islands',
+    'MA':'Massachusetts',
+    'MI':'Michigan',
+    'FM':'Micronesia',
+    'MN':'Minnesota',
+    'MS':'Mississippii',
+    'MO':'Missouri',
+    'MT':'Montana',
+    'NE':'Nebraska',
+    'NV':'Nevada',
+    'NH':'New Hampshire',
+    'NJ':'New Jersey',
+    'NM':'New Mexico',
+    'NY':'New York',
+    'NC':'North Carolina',
+    'ND':'North Dakota',
+    'MP':'Northern Marianas',
+    'OH':'Ohio',
+    'OK':'Oklahoma',
+    'OR': 'Oregon',
+    'PW':'Palau',
+    'PA':'Pennsylvania',
+    'PR':'Puerto Rico',
+    'RI':'Rhode Island',
+    'SC':'South Carolina',
+    'SD':'South Dakota',
+    'TN':'Tennessee',
+    'TX':'Texas',
+    'UT':'Utah',
+    'VT':'Vermont',
+    'VA':'Virginia',
+    'VI':'Virgin Islands',
+    'WA':'Washington',
+    'WV':'West Virginia',
+    'WI':'Wisconsin',
+    'WY':'Wyoming'}
+
+    try:
+        return stateDict[rep['state']]
+    except KeyError:
+        return ''
 # --------------- Helpers that build all of the responses ----------------------
 
 

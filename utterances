@@ -25,9 +25,15 @@ GetOffice What is the address for {rep}
 GetOffice Where is {rep} located
 GetOffice How can I mail {rep}
 GetOffice Where do I send {rep} mail
-GetOffice Where is {rep}s office.
-TermEnd When does {rep}s term end.
-TermEnd When is {rep} out of office.
-TermEnd When is {rep} up for re election.
-GetState What state is {rep} from.
-GetState What state does {rep} represent.
+GetOffice Where is {rep}s office
+TermEnd When does {rep}s term end
+TermEnd When is {rep} out of office
+TermEnd When is {rep} up for re election
+GetState What state is {rep} from
+GetState What state does {rep} represent
+GetState What district is {rep} from
+GetState What district does {rep} represent
+GetState Tell me what district {rep} represents
+GetState Tell me where {rep} is from
+GetState Tell me what state {rep} represents
+GetWebsite What is the website for {rep} 

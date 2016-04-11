@@ -11,9 +11,7 @@ def lambda_handler(event, context):
           event['session']['application']['applicationId'])
 
     """
-    Uncomment this if statement and populate with your skill's application ID to
-    prevent someone else from configuring a skill that sends requests to this
-    function.
+    Check Application ID
     """
     if (event['session']['application']['applicationId'] !=
              config.applicationid):
@@ -67,7 +65,8 @@ def on_intent(intent_request, session):
         return get_twitter(intent)
     elif intent_name == "GetPhone":
         return get_phone(intent)
-    #elif intent_name == "FindParty":
+    elif intent_name == "GetOffice":
+        return get_office(intent)
     #elif intent_name == "FindTerm":
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
@@ -197,6 +196,27 @@ def get_phone(intent):
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def get_office(intent):
+    print(intent['slots']['rep']['value'])
+    card_title = intent['slots']['rep']['value']
+    should_end_session = True
+    session_attributes = {}
+    name = (intent['slots']['rep']['value']).lower()
+    
+    congressman = findRep(name, 'congressNames.json',True)
+
+    if congressman:
+        speech_output = generateAttributeString(congressman,'office','address')
+
+
+    else:
+        speech_output = "Sorry, I didn't understand that representative. " \
+                        "Please try again."
+    
+    reprompt_text = ""                      
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could
     add those here
@@ -215,13 +235,19 @@ def get_welcome_response():
         card_title, speech_output, reprompt_text, should_end_session))
 
 
-def findRep(name,nameJSON):
+def findRep(name,nameJSON, address=False):
     with open(nameJSON,'r') as f:
         nameDict = json.load(f)
+    if address:
+        with open('addressDict.json','r') as g:
+            addressDict = json.load(g)
     for k,v in nameDict.iteritems():
         if name in v:
             print("found")
-            return sunlight.congress.legislator(k,id_type='bioguide')
+            legislator = sunlight.congress.legislator(k,id_type='bioguide')
+            if address:
+                legislator['full_address'] = addressDict[k]
+            return legislator 
     return None
 
 def generateAttributeString(rep,attribute,nickname):

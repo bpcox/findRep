@@ -206,7 +206,7 @@ def get_office(intent):
     congressman = findRep(name, 'congressNames.json',True)
 
     if congressman:
-        speech_output = generateAttributeString(congressman,'office','address')
+        speech_output = generateAttributeString(congressman,'full_address','address')
 
 
     else:

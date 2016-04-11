@@ -63,7 +63,8 @@ def on_intent(intent_request, session):
         return get_representatives(intent)
     elif intent_name == "GetParty":
         return get_party(intent)
-    #elif intent_name == "FindRepByZip":
+    elif intent_name == "GetTwitter":
+        return get_twitter(intent)
     #elif intent_name == "FindContactInfo":
     #elif intent_name == "FindParty":
     #elif intent_name == "FindTerm":
@@ -133,9 +134,7 @@ def get_party(intent):
     session_attributes = {}
     name = (intent['slots']['rep']['value']).lower()
     print (name)
-    with open('congressNames.json', 'r') as f:
-        congressNames = json.load(f)
-    congressman = findRep(name, congressNames)
+    congressman = findRep(name, 'congressNames.json')
     
     if congressman:
         if congressman['party'] == 'R':
@@ -144,15 +143,29 @@ def get_party(intent):
             party = ' Democrat'
         else:
             party = 'n Independent'
-        if congressman['title'] == 'Rep':
-            fulltitle = 'Representative'
-        elif congressman['title']== 'Sen':
-            fulltitle = 'Senator'
-        elif congressman['title'] == 'Com':
-            fulltitle = 'Commissioner'
-        elif congressman['title'] == 'Del':
-            fulltitle = 'Delegate'
+        fulltitle = expandTitle(congressman)
         speech_output = fulltitle + ' ' + congressman['last_name'] + ' is a' + party
+
+    else:
+        speech_output = "Sorry, I didn't understand that representative. " \
+                        "Please try again."
+    
+    reprompt_text = ""                      
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+
+def get_twitter(intent):
+    print(intent['slots']['rep']['value'])
+    card_title = intent['slots']['rep']['value']
+    should_end_session = True
+    session_attributes = {}
+    name = (intent['slots']['rep']['value']).lower()
+    
+    congressman = findRep(name, 'congressNames.json')
+
+    if congressman:
+        speech_output = generateAttributeString(congressman,'twitter_id','twitter account')
+
 
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
@@ -181,13 +194,38 @@ def get_welcome_response():
         card_title, speech_output, reprompt_text, should_end_session))
 
 
-def findRep(name,nameDict):
+def findRep(name,nameJSON):
+    with open(nameJSON,'r') as f:
+        nameDict = json.load(f)
     for k,v in nameDict.iteritems():
         if name in v:
             print("found")
             return sunlight.congress.legislator(k,id_type='bioguide')
     return None
-    
+
+def generateAttributeString(rep,attribute,nickname):
+    fulltitle = expandTitle(rep)
+    if attribute in rep and rep[attribute] != None:
+        resultAttribute = rep[attribute]
+    else:
+        return fulltitle + ' ' + rep['first_name'] + ' ' + rep['last_name'] + " does not have a " + nickname
+
+    resultString = "The " + nickname + " for " + fulltitle + ' ' + rep['first_name'] + ' ' + rep['last_name'] + \
+    ' is ' + resultAttribute
+    return resultString
+
+
+def expandTitle(rep):
+    if rep['title'] == 'Rep':
+        return 'Representative'
+    elif rep['title']== 'Sen':
+        return 'Senator'
+    elif rep['title'] == 'Com':
+        return 'Commissioner'
+    elif rep['title'] == 'Del':
+        return 'Delegate'
+    else:
+        return ''
         
 # --------------- Helpers that build all of the responses ----------------------
 

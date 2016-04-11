@@ -3,3 +3,6 @@ FindByZip Who are the reps for {zip}
 FindByZip Who represents {zip}
 FindByZip Reps for {zip}
 FindByZip Representatives for {zip}
+GetParty What party is {rep} in?
+GetParty What party does {rep} belong to?
+GetParty Is {rep} a Democrat or a Republican?

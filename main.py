@@ -1,7 +1,8 @@
 from __future__ import print_function
 import sunlight
 import config
-import memberNames
+import memberNames.memberNames as congressNames
+
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
     etc.) The JSON body of the request is provided in the event parameter.
@@ -60,7 +61,8 @@ def on_intent(intent_request, session):
     # Dispatch to your skill's intent handlers
     if intent_name == "FindByZip":
         return get_representatives(intent)
-    #elif intent_name == "FindSenByZip":
+    elif intent_name == "GetParty":
+        return get_party(intent)
     #elif intent_name == "FindRepByZip":
     #elif intent_name == "FindContactInfo":
     #elif intent_name == "FindParty":
@@ -123,6 +125,40 @@ def get_representatives(intent):
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+
+def get_party(intent):
+    print(intent['slots']['rep']['value']))
+    card_title = intent['slots']['rep']['value']
+    should_end_session = True
+    session_attributes = {}
+    memberID
+    for k,v in congressNames.iteritems():
+        if intent['slots']['rep']['value'] in v:
+            memberID = k
+            break
+    
+    
+    congressman = sunlight.congress.legislator(memberID,id_type='bioguide')
+    if congressman:
+        if congressman['party'] == 'R':
+            party = 'Republican'
+        elif congressman['party'] == 'D':
+            party = 'Democrat'
+        else:
+            party = 'Independent'
+        speech_output = congressman['title'] + ' ' + congressman['last_name'] + ' is a ' + party
+	
+
+
+
+
+    else:
+        speech_output = "Sorry, I didn't understand that representative. " \
+                        "Please try again."
+    
+    reprompt_text = ""                      
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
 
 def get_welcome_response():

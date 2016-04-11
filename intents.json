@@ -1,13 +1,21 @@
 {
-      "intents": [
-         {
-            "intent": "FindByZip",
-            "slots": [
-               {
-                  "name": "zip",
-                  "type": "AMAZON.NUMBER"
-               }
-               ]
-          }
-          ]
+  "intents": [
+    {
+      "intent": "FindByZip",
+      "slots": [
+        {
+          "name": "Sign",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "GetParty",
+      "slots": [
+        {
+          "name": "rep",
+          "type": "federalRep"
+        }]
+    }
+  ]
 }

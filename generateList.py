@@ -21,6 +21,7 @@ crossduplicates = ['Brown', 'King', 'Reed', 'Lee', 'Johnson', 'Sessions',
 'Murphy', 'Peters', 'Scott', 'Collins', 'Graham']
 
 congressNames = dict()
+duplicateNames = dict()
 
 for legislator in legislators:
     for element in legislator:
@@ -32,12 +33,16 @@ for legislator in legislators:
         titlefirstlast = "Representative " + legislator['first_name'] + ' ' + legislator['last_name']
         if legislator['last_name'] in houseduplicates:
             titlelast = ''
+            duptitlelast = "Representative " + legislator['last_name']
         else:
+            duptitlelast = ''
             titlelast = "Representative " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -55,12 +60,16 @@ for legislator in legislators:
         titlefirstlast = "Senator " + legislator['first_name'] + ' ' + legislator['last_name']
         if legislator['last_name'] in senateduplicates:
             titlelast = ''
+            duptitlelast = "Senator " + legislator['last_name']
         else:
+            duptitlelast = ''
             titlelast = "Senator " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -78,12 +87,16 @@ for legislator in legislators:
         titlefirstlast = "Delegate " + legislator['first_name'] + ' ' + legislator['last_name']
         if legislator['last_name'] in houseduplicates:
             titlelast = ''
+            duptitlelast = "Delegate " + legislator['last_name']
         else:
+            duptitlelast = ''
             titlelast = "Delegate " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -100,10 +113,18 @@ for legislator in legislators:
     if legislator['title']=='Com':
         titlefirstlast = "Commissioner " + legislator['first_name'] + ' ' + legislator['last_name']
         titlelast = "Commissioner " + legislator['last_name']
+        if legislator['last_name'] in houseduplicates:
+            titlelast = ''
+            duptitlelast = "Commissioner " + legislator['last_name']
+        else:
+            duptitlelast = ''
+            titlelast = "Commissioner " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -116,6 +137,14 @@ for legislator in legislators:
             nicklast = legislator['nickname'] + ' ' + legislator['last_name']
         else:
             nicklast = ''
+
     congressNames[legislator['bioguide_id'].encode('utf-8')] = [(firstlast.encode('utf-8')).lower(),(lastfirst.encode('utf-8')).lower(),(titlefirstlast.encode('utf-8')).lower(),(titlelast.encode('utf-8')).lower(),(last.encode('utf-8')).lower(),(firstmiddlelast.encode('utf-8')).lower(),(suffixname.encode('utf-8')).lower(),(nicklast.encode('utf-8')).lower()]
+
+    duplicateNames[legislator['bioguide_id'].encode('utf-8')] = [(duptitlelast.encode('utf-8')).lower(),(duplast.encode('utf-8')).lower()]
+
     with open('congressNames.json', 'w') as f:
         json.dump(congressNames, f)
+
+    with open('duplicateNames.json', 'w') as g:
+        json.dump(duplicateNames, g)
+

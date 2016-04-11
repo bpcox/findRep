@@ -166,7 +166,8 @@ def get_twitter(intent):
     if congressman:
         speech_output = generateAttributeString(congressman,'twitter_id','twitter account')
 
-
+    elif findDuplicate(name, 'duplicateNames.json'):
+        speech_output = "The title " + name.replace("'s","") + " is shared by more than one Congressman. Be more specific."
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
@@ -186,7 +187,8 @@ def get_phone(intent):
 
     if congressman:
         speech_output = generateAttributeString(congressman,'phone','phone number')
-
+    elif findDuplicate(name, 'duplicateNames.json'):
+        speech_output = "The title " + name.replace("'s","") + " is shared by more than one Congressman. Be more specific."
 
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
@@ -208,7 +210,9 @@ def get_office(intent):
     if congressman:
         speech_output = generateAttributeString(congressman,'full_address','address')
 
-
+    elif findDuplicate(name, 'duplicateNames.json'):
+        speech_output = "The title " + name.replace("'s","") + " is shared by more than one Congressman. Be more specific."
+        
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
@@ -236,6 +240,7 @@ def get_welcome_response():
 
 
 def findRep(name,nameJSON, address=False):
+    name=name.replace("'s",'')
     with open(nameJSON,'r') as f:
         nameDict = json.load(f)
     if address:
@@ -249,6 +254,16 @@ def findRep(name,nameJSON, address=False):
                 legislator['full_address'] = addressDict[k]
             return legislator 
     return None
+
+def findDuplicate(name,duplicateJSON):
+    name=name.replace("'s",'')
+    with open(duplicateJSON,'r') as f:
+        duplicateDict = json.load(f)
+    for k,v in duplicateDict.iteritems():
+        if name in v:
+            print("Duplicate found")
+            return True
+    return False
 
 def generateAttributeString(rep,attribute,nickname):
     fulltitle = expandTitle(rep)

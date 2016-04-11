@@ -1,7 +1,7 @@
 import sunlight
 import json
 from unidecode import unidecode
-from types import UnicodeType
+
 legislators = sunlight.congress.all_legislators_in_office()
 
 listOfNames = dict()
@@ -15,14 +15,17 @@ houseduplicates = ['Collins', 'Rice', 'Green', 'Thompson', 'Ryan', 'Kelly', 'Wil
 
 bothduplicates =  ['Brown', 'Collins', 'Rice', 'Reed', 'Green', 'Thompson', 'Ryan', 'Kelly', 'Wilson', 'Smith', 'Brooks', 'Rogers', 'Duncan', 'Maloney', 'Price', 'Murphy', 'Bishop', 'Heck', 'Graves', 'Jenkins', 'King', 'Johnson', 'Graham', 'Peters', 'Carter', 'Miller', 'Lee', 'Brady', 'Davis', 'Sanchez', 'Young', 'Sessions', 'Scott']
 
+
+
 crossduplicates = ['Brown', 'King', 'Reed', 'Lee', 'Johnson', 'Sessions',
 'Murphy', 'Peters', 'Scott', 'Collins', 'Graham']
 
 congressNames = dict()
+duplicateNames = dict()
 
 for legislator in legislators:
     for element in legislator:
-        if isinstance(legislator[element], unicode):
+        if isinstance(legislator[element],unicode):
             legislator[element] = unidecode(legislator[element])
     firstlast = legislator['first_name'] + ' ' + legislator['last_name']
     lastfirst = legislator['last_name'] + ' ' + legislator['first_name']
@@ -30,12 +33,16 @@ for legislator in legislators:
         titlefirstlast = "Representative " + legislator['first_name'] + ' ' + legislator['last_name']
         if legislator['last_name'] in houseduplicates:
             titlelast = ''
+            duptitlelast = "Representative " + legislator['last_name']
         else:
+            duptitlelast = ''
             titlelast = "Representative " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -53,12 +60,16 @@ for legislator in legislators:
         titlefirstlast = "Senator " + legislator['first_name'] + ' ' + legislator['last_name']
         if legislator['last_name'] in senateduplicates:
             titlelast = ''
+            duptitlelast = "Senator " + legislator['last_name']
         else:
+            duptitlelast = ''
             titlelast = "Senator " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -76,12 +87,16 @@ for legislator in legislators:
         titlefirstlast = "Delegate " + legislator['first_name'] + ' ' + legislator['last_name']
         if legislator['last_name'] in houseduplicates:
             titlelast = ''
+            duptitlelast = "Delegate " + legislator['last_name']
         else:
+            duptitlelast = ''
             titlelast = "Delegate " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -98,10 +113,18 @@ for legislator in legislators:
     if legislator['title']=='Com':
         titlefirstlast = "Commissioner " + legislator['first_name'] + ' ' + legislator['last_name']
         titlelast = "Commissioner " + legislator['last_name']
+        if legislator['last_name'] in houseduplicates:
+            titlelast = ''
+            duptitlelast = "Commissioner " + legislator['last_name']
+        else:
+            duptitlelast = ''
+            titlelast = "Commissioner " + legislator['last_name']
         if legislator['last_name'] in bothduplicates:
             last = ''
+            duplast=legislator['last_name']
         else:
             last = legislator['last_name']
+            duplast=''
         if 'middle_name' in legislator and legislator['middle_name'] is not None:
             firstmiddlelast = legislator['first_name'] + ' ' + legislator['middle_name'] + ' ' + legislator['last_name']
         else:
@@ -114,10 +137,23 @@ for legislator in legislators:
             nicklast = legislator['nickname'] + ' ' + legislator['last_name']
         else:
             nicklast = ''
-    congressNames[legislator['bioguide_id'].encode('utf-8')] = [firstlast.encode('utf-8'),lastfirst.encode('utf-8'),titlefirstlast.encode('utf-8'),titlelast.encode('utf-8'),last.encode('utf-8'),firstmiddlelast.encode('utf-8'),suffixname.encode('utf-8'),nicklast.encode('utf-8')]
+
+    congressNames[legislator['bioguide_id'].encode('utf-8')] = [(firstlast.encode('utf-8')),(lastfirst.encode('utf-8')),(titlefirstlast.encode('utf-8')),(titlelast.encode('utf-8')),(last.encode('utf-8')),(firstmiddlelast.encode('utf-8')),(suffixname.encode('utf-8')),(nicklast.encode('utf-8'))]
+
+    duplicateNames[legislator['bioguide_id'].encode('utf-8')] = [(duptitlelast.encode('utf-8')),(duplast.encode('utf-8'))]
+
 f=open('nameSlot','w')
+
 for k,v in congressNames.iteritems():
     for printName in v:
         if printName!='':
             f.write(printName + '\n')
+duplicateset = set()
+for j,k in duplicateNames.iteritems():
+    for printDup in k:
+        if printDup!='':
+            duplicateset.add(printDup)
+
+for element in duplicateset:
+    f.write(element + '\n')
 

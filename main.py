@@ -65,7 +65,8 @@ def on_intent(intent_request, session):
         return get_party(intent)
     elif intent_name == "GetTwitter":
         return get_twitter(intent)
-    #elif intent_name == "FindContactInfo":
+    elif intent_name == "GetPhone":
+        return get_phone(intent)
     #elif intent_name == "FindParty":
     #elif intent_name == "FindTerm":
     elif intent_name == "AMAZON.HelpIntent":
@@ -175,6 +176,26 @@ def get_twitter(intent):
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def get_phone(intent):
+    print(intent['slots']['rep']['value'])
+    card_title = intent['slots']['rep']['value']
+    should_end_session = True
+    session_attributes = {}
+    name = (intent['slots']['rep']['value']).lower()
+    
+    congressman = findRep(name, 'congressNames.json')
+
+    if congressman:
+        speech_output = generateAttributeString(congressman,'phone','phone number')
+
+
+    else:
+        speech_output = "Sorry, I didn't understand that representative. " \
+                        "Please try again."
+    
+    reprompt_text = ""                      
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could

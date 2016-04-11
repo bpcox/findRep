@@ -1,8 +1,7 @@
 from __future__ import print_function
 import sunlight
 import config
-from memberNames import *
-
+import json
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -134,6 +133,8 @@ def get_party(intent):
     session_attributes = {}
     name = (intent['slots']['rep']['value']).lower()
     print (name)
+    with open('congressNames.json', 'r') as f:
+        congressNames = json.load(f)
     congressman = findRep(name, congressNames)
     
     if congressman:

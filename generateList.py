@@ -117,5 +117,5 @@ for legislator in legislators:
         else:
             nicklast = ''
     congressNames[legislator['bioguide_id'].encode('utf-8')] = [(firstlast.encode('utf-8')).lower(),(lastfirst.encode('utf-8')).lower(),(titlefirstlast.encode('utf-8')).lower(),(titlelast.encode('utf-8')).lower(),(last.encode('utf-8')).lower(),(firstmiddlelast.encode('utf-8')).lower(),(suffixname.encode('utf-8')).lower(),(nicklast.encode('utf-8')).lower()]
-
-print congressNames
+    with open('congressNames.json', 'w') as f:
+        json.dump(congressNames, f)

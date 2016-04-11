@@ -115,8 +115,9 @@ for legislator in legislators:
         else:
             nicklast = ''
     congressNames[legislator['bioguide_id'].encode('utf-8')] = [firstlast.encode('utf-8'),lastfirst.encode('utf-8'),titlefirstlast.encode('utf-8'),titlelast.encode('utf-8'),last.encode('utf-8'),firstmiddlelast.encode('utf-8'),suffixname.encode('utf-8'),nicklast.encode('utf-8')]
-
+f=open('nameSlot','w')
 for k,v in congressNames.iteritems():
     for printName in v:
         if printName!='':
-            print printName
+            f.write(printName + '\n')
+

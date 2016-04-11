@@ -132,15 +132,18 @@ def get_party(intent):
     card_title = intent['slots']['rep']['value']
     should_end_session = True
     session_attributes = {}
+    name = (intent['slots']['rep']['value']).lower()
+    print (name)
+    congressman = findRep(name, congressNames)
     memberID = None
+    """
     for k,v in congressNames.iteritems():
         if (intent['slots']['rep']['value']).lower() in v:
             memberID = k
             break
-    
-    
-    congressman = sunlight.congress.legislator(memberID,id_type='bioguide')
-    fulltitle = ''
+
+
+    congressman = sunlight.congress.legislator(memberID,id_type='bioguide') """
     if congressman:
         if congressman['party'] == 'R':
             party = ' Republican'
@@ -189,6 +192,16 @@ def get_welcome_response():
         card_title, speech_output, reprompt_text, should_end_session))
 
 
+def findRep(name,nameDict):
+    for k,v in nameDict.iteritems():
+        if name in v:
+            print("found")
+            return sunlight.congress.legislator(k,id_type='bioguide')
+        else:
+            print ("not found")
+            return None
+
+    
         
 # --------------- Helpers that build all of the responses ----------------------
 

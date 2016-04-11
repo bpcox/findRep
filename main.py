@@ -1,7 +1,8 @@
 from __future__ import print_function
 import sunlight
 import config
-import memberNames.memberNames as congressNames
+from memberNames import *
+
 
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
@@ -127,26 +128,35 @@ def get_representatives(intent):
 
 
 def get_party(intent):
-    print(intent['slots']['rep']['value']))
+    print(intent['slots']['rep']['value'])
     card_title = intent['slots']['rep']['value']
     should_end_session = True
     session_attributes = {}
-    memberID
+    memberID = None
     for k,v in congressNames.iteritems():
-        if intent['slots']['rep']['value'] in v:
+        if (intent['slots']['rep']['value']).lower() in v:
             memberID = k
             break
     
     
     congressman = sunlight.congress.legislator(memberID,id_type='bioguide')
+    fulltitle = ''
     if congressman:
         if congressman['party'] == 'R':
-            party = 'Republican'
+            party = ' Republican'
         elif congressman['party'] == 'D':
-            party = 'Democrat'
+            party = ' Democrat'
         else:
-            party = 'Independent'
-        speech_output = congressman['title'] + ' ' + congressman['last_name'] + ' is a ' + party
+            party = 'n Independent'
+        if congressman['title'] == 'Rep':
+            fulltitle = 'Representative'
+        elif congressman['title']== 'Sen':
+            fulltitle = 'Senator'
+        elif congressman['title'] == 'Com':
+            fulltitle = 'Commissioner'
+        elif congressman['title'] == 'Del':
+            fulltitle = 'Delegate'
+        speech_output = fulltitle + ' ' + congressman['last_name'] + ' is a' + party
 	
 
 

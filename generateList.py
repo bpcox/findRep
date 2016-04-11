@@ -116,6 +116,6 @@ for legislator in legislators:
             nicklast = legislator['nickname'] + ' ' + legislator['last_name']
         else:
             nicklast = ''
-    congressNames[legislator['bioguide_id'].encode('utf-8')] = [firstlast.encode('utf-8'),lastfirst.encode('utf-8'),titlefirstlast.encode('utf-8'),titlelast.encode('utf-8'),last.encode('utf-8'),firstmiddlelast.encode('utf-8'),suffixname.encode('utf-8'),nicklast.encode('utf-8')]
+    congressNames[legislator['bioguide_id'].encode('utf-8')] = [(firstlast.encode('utf-8')).lower(),(lastfirst.encode('utf-8')).lower(),(titlefirstlast.encode('utf-8')).lower(),(titlelast.encode('utf-8')).lower(),(last.encode('utf-8')).lower(),(firstmiddlelast.encode('utf-8')).lower(),(suffixname.encode('utf-8')).lower(),(nicklast.encode('utf-8')).lower()]
 
 print congressNames

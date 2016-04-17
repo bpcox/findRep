@@ -84,7 +84,11 @@ def on_session_ended(session_ended_request, session):
 # --------------- Functions that control the skill's behavior ------------------
 
 def get_representatives(intent):
-    print(int(intent['slots']['zip']['value']))
+    is_null = check_null(intent,'zip')
+    if is_null:
+        print ("This is null")
+        return is_null
+        
     card_title = intent['slots']['zip']['value']
     should_end_session = True
     session_attributes = {}
@@ -135,6 +139,9 @@ def get_representatives(intent):
 
 
 def get_party(intent):
+    is_null = check_null(intent,'rep')
+    if is_null:
+        return is_null
     print(intent['slots']['rep']['value'])
     card_title = intent['slots']['rep']['value']
     should_end_session = True
@@ -162,6 +169,9 @@ def get_party(intent):
         card_title, speech_output, reprompt_text, should_end_session))
 
 def get_twitter(intent):
+    is_null = check_null(intent,'rep')
+    if is_null:
+        return is_null
     print(intent['slots']['rep']['value'])
     card_title = intent['slots']['rep']['value']
     should_end_session = True
@@ -184,6 +194,9 @@ def get_twitter(intent):
         card_title, speech_output, reprompt_text, should_end_session))
 
 def get_phone(intent):
+    is_null = check_null(intent,'rep')
+    if is_null:
+        return is_null
     print(intent['slots']['rep']['value'])
     card_title = intent['slots']['rep']['value']
     should_end_session = True
@@ -206,6 +219,9 @@ def get_phone(intent):
         card_title, speech_output, reprompt_text, should_end_session))
 
 def get_office(intent):
+    is_null = check_null(intent,'rep')
+    if is_null:
+        return is_null
     print(intent['slots']['rep']['value'])
     card_title = intent['slots']['rep']['value']
     should_end_session = True
@@ -382,3 +398,16 @@ def build_response(session_attributes, speechlet_response):
         'sessionAttributes': session_attributes,
         'response': speechlet_response
     }
+
+def check_null(intent, field):
+    if 'value' not in (intent['slots'][field]):
+        speech_output = "Sorry I did not understand that."
+        should_end_session = False
+        session_attributes = {}
+        reprompt_text = ""
+        card_title = "Find Rep Info"
+        #return true if null
+        return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+    else:
+        return False

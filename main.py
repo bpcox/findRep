@@ -69,6 +69,8 @@ def on_intent(intent_request, session):
     #elif intent_name == "FindTerm":
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
+    elif intent_name == "AMAZON.StopIntent" or "AMAZON.CancelIntent":
+        return end_session()
     else:
         raise ValueError("Invalid intent")
 
@@ -163,6 +165,7 @@ def get_party(intent):
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
+        should_end_session = False
     
     reprompt_text = ""                      
     return build_response(session_attributes, build_speechlet_response(
@@ -188,6 +191,7 @@ def get_twitter(intent):
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
+        should_end_session = False
     
     reprompt_text = ""                      
     return build_response(session_attributes, build_speechlet_response(
@@ -213,7 +217,8 @@ def get_phone(intent):
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
-    
+        should_end_session = False
+            
     reprompt_text = ""                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
@@ -239,10 +244,13 @@ def get_office(intent):
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
-    
+        should_end_session = False
     reprompt_text = ""                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
+        
+def end_session():
+    return build_response({}, build_speechlet_response("","","",True))
 
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could

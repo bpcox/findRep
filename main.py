@@ -190,7 +190,7 @@ def get_twitter(intent):
         speech_output = "The title " + name.replace("'s","") + " is shared by more than one Congressman. Be more specific."
     else:
         speech_output = "Sorry, I didn't understand that representative. " \
-                        "Please try again."
+                        "What information do you want?"
         should_end_session = False
     
     reprompt_text = ""                      

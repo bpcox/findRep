@@ -66,7 +66,10 @@ def on_intent(intent_request, session):
         return get_phone(intent)
     elif intent_name == "GetOffice":
         return get_office(intent)
-    #elif intent_name == "FindTerm":
+    elif intent_name == "FindState":
+        return get_state(intent)
+    elif intent_name == "GetTermEnd":
+        return get_term_end(intent)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
     elif intent_name == "AMAZON.StopIntent" or "AMAZON.CancelIntent":
@@ -249,6 +252,59 @@ def get_office(intent):
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
         
+def get_state(intent):
+    is_null = check_null(intent,'rep')
+    if is_null:
+        return is_null
+    print(intent['slots']['rep']['value'])
+    card_title = intent['slots']['rep']['value']
+    should_end_session = True
+    session_attributes = {}
+    name = (intent['slots']['rep']['value']).lower()
+    
+    congressman = findRep(name, 'congressNames.json')
+
+    if congressman:
+        speech_output = generateAttributeString(congressman,'state','state',state=True)
+
+    elif findDuplicate(name, 'duplicateNames.json'):
+        speech_output = "The title " + name.replace("'s","") + " is shared by more than one Congressman. Be more specific."
+    else:
+        speech_output = "Sorry, I didn't understand that representative. " \
+                        "What information do you want?"
+        should_end_session = False
+    
+    reprompt_text = ""                      
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+        
+    
+def get_term_end(intent):
+    is_null = check_null(intent,'rep')
+    if is_null:
+        return is_null
+    print(intent['slots']['rep']['value'])
+    card_title = intent['slots']['rep']['value']
+    should_end_session = True
+    session_attributes = {}
+    name = (intent['slots']['rep']['value']).lower()
+    
+    congressman = findRep(name, 'congressNames.json')
+
+    if congressman:
+        speech_output = generateAttributeString(congressman,'term_end','end of term')
+
+    elif findDuplicate(name, 'duplicateNames.json'):
+        speech_output = "The title " + name.replace("'s","") + " is shared by more than one Congressman. Be more specific."
+    else:
+        speech_output = "Sorry, I didn't understand that representative. " \
+                        "What information do you want?"
+        should_end_session = False
+    
+    reprompt_text = ""                      
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
+        
 def end_session():
     return build_response({}, build_speechlet_response("","","",True))
 
@@ -283,7 +339,7 @@ def findRep(name,nameJSON, address=False):
             legislator = sunlight.congress.legislator(k,id_type='bioguide')
             if address:
                 legislator['full_address'] = addressDict[k]
-            return legislator 
+            return legislator
     return None
 
 def findDuplicate(name,duplicateJSON):
@@ -296,13 +352,17 @@ def findDuplicate(name,duplicateJSON):
             return True
     return False
 
-def generateAttributeString(rep,attribute,nickname):
+def generateAttributeString(rep,attribute,nickname,state=False):
     fulltitle = expandTitle(rep)
     if attribute in rep and rep[attribute] != None:
         resultAttribute = rep[attribute]
     else:
         return fulltitle + ' ' + rep['first_name'] + ' ' + rep['last_name'] + " does not have a " + nickname
 
+    if state:
+        resultString = "The " + nickname + " for " + fulltitle + ' ' + rep['first_name'] + ' ' + rep['last_name'] + \
+        ' is ' + expandState(resultAttribute)
+        return resultString
     resultString = "The " + nickname + " for " + fulltitle + ' ' + rep['first_name'] + ' ' + rep['last_name'] + \
     ' is ' + resultAttribute
     return resultString

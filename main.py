@@ -71,7 +71,7 @@ def on_intent(intent_request, session):
     elif intent_name == "GetTermEnd":
         return get_term_end(intent)
     elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response()
+        return get_help()
     elif intent_name == "AMAZON.StopIntent" or "AMAZON.CancelIntent":
         return end_session()
     else:
@@ -135,7 +135,7 @@ def get_representatives(intent):
         speech_output = reps_string + senators_string
 
     else:
-        speech_output = "Sorry, that isn't a valid zip code. " \
+        speech_output = "Sorry, no congressman is listed for that zip code. " \
                         "Please try again."
     
     reprompt_text = ""                      
@@ -170,7 +170,7 @@ def get_party(intent):
                         "Please try again."
         should_end_session = False
     
-    reprompt_text = ""                      
+    reprompt_text = "Try asking a different question"                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
@@ -196,7 +196,7 @@ def get_twitter(intent):
                         "What information do you want?"
         should_end_session = False
     
-    reprompt_text = ""                      
+    reprompt_text = "Try asking a different question."                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
@@ -222,7 +222,7 @@ def get_phone(intent):
                         "Please try again."
         should_end_session = False
             
-    reprompt_text = ""                      
+    reprompt_text = "Try asking a different question."                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
@@ -248,7 +248,7 @@ def get_office(intent):
         speech_output = "Sorry, I didn't understand that representative. " \
                         "Please try again."
         should_end_session = False
-    reprompt_text = ""                      
+    reprompt_text = "Try asking a different question"                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
         
@@ -274,7 +274,7 @@ def get_state(intent):
                         "What information do you want?"
         should_end_session = False
     
-    reprompt_text = ""                      
+    reprompt_text = "Try asking a different question"                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
         
@@ -301,7 +301,7 @@ def get_term_end(intent):
                         "What information do you want?"
         should_end_session = False
     
-    reprompt_text = ""                      
+    reprompt_text = "Try asking a different question."                      
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
         
@@ -319,12 +319,21 @@ def get_welcome_response():
     
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
-    reprompt_text = None
+    reprompt_text = "You can ask who the congrssmen are for a zip code, or ask for a specific congressman's phone number or mailing address"
     
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
 
+def get_help():
+    session_attributes = {}
+    card_title = "Welcome"
+    speech_output = "Ask for the Congressmen for a zip code or ask for a specific Congressman's contact information"
+
+    reprompt_text = "For instance, you can ask, What is Representative Smith's twitter"
+    should_end_session = False
+
+    return build_response(session_attributes, build_speechlet_response(card_title,speech_output, reprompt_text, should_end_session))
 
 def findRep(name,nameJSON, address=False):
     name=name.replace("'s",'')
@@ -472,7 +481,7 @@ def check_null(intent, field):
         speech_output = "Sorry I did not understand that."
         should_end_session = False
         session_attributes = {}
-        reprompt_text = ""
+        reprompt_text = "Ask a different question"
         card_title = "Find Rep Info"
         #return true if null
         return build_response(session_attributes, build_speechlet_response(
